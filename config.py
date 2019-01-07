@@ -1,15 +1,14 @@
 import os
 
-# qconn = q.q(host = 'localhost', port = 8083, user = 'sunqi')
 # Q_HOST = os.environ.get('Q_HOST_ADDR','localhost')
 Q_HOST = os.environ.get('Q_HOST_ADDR','39.105.55.115')
-Q_PORT = os.environ.get('Q_PORT', 8086)
+Q_PORT = os.environ.get('Q_PORT', 8085)
 Q_USER= os.environ.get('Q_USER', 'sunqi:sunqi123')
 
 
-WEBSOCKET_URL = os.environ.get('WEBSOCKET_URL', "ws://47.75.208.12:8090/")
-WEBSOCKET_URL2 = os.environ.get('WEBSOCKET_URL', "ws://47.75.208.12:8090/")
-FULL_WEBSOCKET_URL = os.environ.get('FULL_WEBSOCKET_URL', "ws://47.75.208.12:8090/")
+#WEBSOCKET_URL = os.environ.get('WEBSOCKET_URL', "ws://47.75.208.12:8090/")
+# WEBSOCKET_URL2 = os.environ.get('WEBSOCKET_URL', "ws://47.75.208.12:8090/")
+# FULL_WEBSOCKET_URL = os.environ.get('FULL_WEBSOCKET_URL', "ws://47.75.208.12:8090/")
 
 # MONGODB_DB_URL = os.environ.get('MONGO_WRAPPER', "mongodb://yoyo:yoyo123@127.0.0.1:27017/cybex") # clockwork
 # MONGODB_DB_NAME = os.environ.get('MONGO_DB_NAME', 'cybex')

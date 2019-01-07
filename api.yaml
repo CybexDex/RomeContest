@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
-  title: BitShares Excplorer API
-  description: Exposes BitShares calls needed to explore the blockchain
+  title: ROME Context appserver
+  description: Exposes ROME Context calls needed to explore
   version: '1'
 schemes:
   - http
@@ -9,6 +9,17 @@ schemes:
 produces:
   - application/json
 paths:
+  "/get_ex_rate":
+    get:
+      description: Get exchange rate
+      operationId: api.explorer.get_ex_rate
+      responses:
+        '200':
+          description: Array of operation data
+        '500':
+          description: Error processing parameters
+      tags:
+        - api
   "/get_portfolio_ranking":
     get:
       description: Get portfolio_ranking with algo in ('RV','VOT','COMP'), limit (top N)
@@ -16,7 +27,7 @@ paths:
       parameters:
         - in: query
           name: algo
-          default: RV
+          default: "RV"
           type: string
           required: true
           description: algo
@@ -33,10 +44,23 @@ paths:
           description: Error processing parameters
       tags:
         - api
-  "/get_ex_rate":
+  "/get_portfolio_account":
     get:
-      description: Get exchange rate
-      operationId: api.explorer.get_ex_rate
+      description: Get get_portfolio_account with account name, slot in minute
+      operationId: api.explorer.get_portfolio_account
+      parameters:
+        - in: query
+          name: account
+          default: "nathan"
+          type: string
+          required: true
+          description: account
+        - in: query
+          name: slot
+          default: 10
+          type: integer
+          required: true
+          description: slot in minute
       responses:
         '200':
           description: Array of operation data
@@ -44,5 +68,7 @@ paths:
           description: Error processing parameters
       tags:
         - api
- 
+
+
+
 
