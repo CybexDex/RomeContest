@@ -1,14 +1,11 @@
 
-reconnect:{[] hapi::hopen `$":210.3.74.58:6039:uatuser:u@T$Yb"}
-closeconn:{[] hclose hapi;}
-
 now:: "P"$((string(.z.p))[til 13])
 
 recoverPortfolio:{[timepoint] 
- eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  hapi"getBalanceByAsset[`JADE.EOS;", (string now )," ; `JADE.USDT]";
- eth:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.ETH;", (string now )," ; `JADE.USDT]";
- btc:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.BTC;", (string now )," ; `JADE.USDT]"; 
- usdt:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.USDT;", (string now )," ; `JADE.USDT]"; 
+ eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  getBalanceByAsset[`JADE.EOS;now; `JADE.USDT];
+ eth:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.ETH;now;`JADE.USDT];
+ btc:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.BTC;now; `JADE.USDT]; 
+ usdt:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.USDT;now; `JADE.USDT]; 
  t::(eos,eth,btc,usdt);
  bact:update time:now from select  cap:sum amount by account from t;
  recov:`time`account xkey update eos:0^eos, eth:0^eth, usdt:0^usdt, btc:0^btc from  (((( bact lj (`account xkey select account, eos:amount from eos) ) lj (`account xkey select account, btc:amount from btc) ) lj (`account xkey select account, eth:amount from eth) ) lj (`account xkey select account,usdt:amount from usdt) );   portfolio,::recov;}
@@ -16,10 +13,10 @@ recoverPortfolio:{[timepoint]
 
 /accountName, asset_name, quantity
 updateBalance:{[]
- eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  hapi"getBalanceByAsset[`JADE.EOS;", (string now )," ; `JADE.USDT]";
- eth:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.ETH;", (string now )," ; `JADE.USDT]";
- btc:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.BTC;", (string now )," ; `JADE.USDT]"; 
- usdt:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.USDT;", (string now )," ; `JADE.USDT]"; 
+ eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  getBalanceByAsset[`JADE.EOS;now; `JADE.USDT];
+ eth:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.ETH;now; `JADE.USDT];
+ btc:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.BTC;now; `JADE.USDT]; 
+ usdt:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.USDT;now; `JADE.USDT]; 
  t:(eos,eth,btc,usdt);
  bact:update time:now from select  cap:sum amount by account from t;
  balance ::`time`account xkey update eos:0^eos, eth:0^eth, usdt:0^usdt, btc:0^btc from  (((( bact lj (`account xkey select account, eos:amount from eos) ) lj (`account xkey select account, btc:amount from btc) ) lj (`account xkey select account, eth:amount from eth) ) lj (`account xkey select account,usdt:amount from usdt) );   portfolio,::balance;}
@@ -42,9 +39,9 @@ get_ranking:{[limit;algo]  select account,rv,sharp,cap,turnover from select [lim
 dumpfile:{[] save `balance.csv }
 
 updateTurnover:{[]
- eth:select asset_name:`JADE.ETH, account:accountName , amount:convertedAmount from hapi"getTurnover[`$\"ETH/USDT\";.z.d - 1D; `JADE.USDT]";
- btc:select asset_name:`JADE.BTC, account:accountName , amount:convertedAmount from hapi"getTurnover[`$\"BTC/USDT\";.z.d - 1D; `JADE.USDT]";
- eos:select asset_name:`JADE.EOS, account:accountName , amount:convertedAmount from hapi"getTurnover[`$\"EOS/USDT\";.z.d - 1D; `JADE.USDT]";
+ eth:select asset_name:`JADE.ETH, account:accountName , amount:convertedAmount from getTurnover[`$"ETH/USDT";.z.d - 1D; `JADE.USDT];
+ btc:select asset_name:`JADE.BTC, account:accountName , amount:convertedAmount from getTurnover[`$"BTC/USDT";.z.d - 1D; `JADE.USDT];
+ eos:select asset_name:`JADE.EOS, account:accountName , amount:convertedAmount from getTurnover[`$"EOS/USDT";.z.d - 1D; `JADE.USDT];
  t:select distinct account from balance;
  to_ind::select account, turnover,is_to:turnover>=20000 from update turnover: 0^turnover from (t lj (select turnover:sum amount by account from (eth,btc,eos) ) );}
 
