@@ -2,7 +2,6 @@
 reconnect:{[] hapi::hopen `$":210.3.74.58:6039:uatuser:u@T$Yb"}
 closeconn:{[] hclose hapi;}
 
-now:: "P"$((string(.z.p))[til 13])
 
 recoverPortfolio:{[timepoint] 
  eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  hapi"getBalanceByAsset[`JADE.EOS;", (string timepoint )," ; `JADE.USDT]";
@@ -16,6 +15,7 @@ recoverPortfolio:{[timepoint]
 
 /accountName, asset_name, quantity
 updateBalance:{[]
+ now:: "P"$((string(.z.p))[til 13])
  eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  hapi"getBalanceByAsset[`JADE.EOS;", (string now )," ; `JADE.USDT]";
  eth:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.ETH;", (string now )," ; `JADE.USDT]";
  btc:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.BTC;", (string now )," ; `JADE.USDT]"; 

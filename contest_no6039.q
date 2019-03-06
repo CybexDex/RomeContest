@@ -1,5 +1,4 @@
 
-now:: "P"$((string(.z.p))[til 13])
 
 recoverPortfolio:{[timepoint] 
  eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  getBalanceByAsset[`JADE.EOS;timepoint; `JADE.USDT];
@@ -13,6 +12,7 @@ recoverPortfolio:{[timepoint]
 
 /accountName, asset_name, quantity
 updateBalance:{[]
+ now:: "P"$((string(.z.p))[til 13])
  eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  getBalanceByAsset[`JADE.EOS;now; `JADE.USDT];
  eth:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.ETH;now; `JADE.USDT];
  btc:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.BTC;now; `JADE.USDT]; 
