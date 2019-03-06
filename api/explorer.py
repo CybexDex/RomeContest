@@ -30,9 +30,10 @@ logger = logging.getLogger('logger')
 @cache.memoize(timeout= 60 )    
 def get_ex_rate(): 
     qconn = q.q(host = config.Q_HOST, port = config.Q_PORT, user = config.Q_USER)
-    sql = '(usdt;eth;eos)'
+    sql = '(usdt;eth;eos;btc)'
     try:
         res = qconn.k(str(sql))
+        res = {'usdt':res[0],'eth':res[1],'eos':res[2],'btc':res[3]}
     except:
         res = []
         logger.error(traceback.format_exc())
@@ -44,7 +45,7 @@ def get_ex_rate():
 def portfolio_ranking(algo, limit):
     # rates = get_ex_rate() # usdt, eth, eos
     qconn = q.q(host = config.Q_HOST, port = config.Q_PORT, user = config.Q_USER)
-    if algo not in ('COMP','RV','VOT'):
+    if algo not in ('COMP','RV','SHARP'):# COMP::select account,cap, score: (rv_score*0.6)+(sharp_score*0.35)+ (to_ind*0.05), rv_score ,sharp_score, turnover from ej[`account;ej[`account;RV;SHARP];to_ind]
         return []
     if limit > 50:
         return []
@@ -59,9 +60,12 @@ def portfolio_ranking(algo, limit):
     qconn.close()
     # return map(lambda x:{'account':x[0], 'value':x[1], 'cap':x[2]  } , list(res))
     if algo == 'COMP':
-        return map(lambda x:{'account':x[0], 'rv':x[1], 'sharp':x[2], 'cap':x[3], 'comp':x[4]  } , list(res))
+        # return map(lambda x:{'account':x[0], 'cap':x[1], 'score':x[2], 'rv_score':x[3], 'sharp_score':x[4], 'turnover':x[5] } , list(res))
+        # return map(lambda x:{'account':x[0], 'rv':x[3], 'sharp':x[4], 'cap':x[1], 'score':x[2], 'turnover':x[5] } , list(res))
+        return map(lambda x:{'account':x[0], 'rv':x[3], 'sharp':x[4], 'cap':x[1], 'turnover':x[5] } , list(res))
     else:
-        return map(lambda x:{'account':x[0], 'rv':x[1], 'sharp':x[2], 'cap':x[3]  } , list(res))
+        # return map(lambda x:{'account':x[0], 'rv':x[1], 'sharp':x[2], 'cap':x[3] ,'score':x[4], 'turnover':x[6] } , list(res))
+        return map(lambda x:{'account':x[0], 'rv':x[1], 'sharp':x[2], 'cap':x[3], 'turnover':x[6] } , list(res))
 
 
 @cache.memoize(timeout= 60 )    

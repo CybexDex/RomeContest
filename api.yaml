@@ -46,7 +46,7 @@ paths:
         - api
   "/get_portfolio_account":
     get:
-      description: Get get_portfolio_account with account name, slot in minute
+      description: Get get_portfolio_account with account name, slot in hour
       operationId: api.explorer.get_portfolio_account
       parameters:
         - in: query
@@ -60,7 +60,7 @@ paths:
           default: 10
           type: integer
           required: true
-          description: slot in minute
+          description: slot in hour
       responses:
         '200':
           description: Array of operation data

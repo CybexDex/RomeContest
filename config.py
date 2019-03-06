@@ -2,7 +2,8 @@ import os
 
 # Q_HOST = os.environ.get('Q_HOST_ADDR','localhost')
 Q_HOST = os.environ.get('Q_HOST_ADDR','39.105.55.115')
-Q_PORT = os.environ.get('Q_PORT', 8085)
+# Q_PORT = os.environ.get('Q_PORT', 8085)
+Q_PORT = os.environ.get('Q_PORT', 9009)
 Q_USER= os.environ.get('Q_USER', 'sunqi:sunqi123')
 
 
