@@ -2,12 +2,12 @@
 now:: "P"$((string(.z.p))[til 13])
 
 recoverPortfolio:{[timepoint] 
- eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  getBalanceByAsset[`JADE.EOS;now; `JADE.USDT];
- eth:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.ETH;now;`JADE.USDT];
- btc:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.BTC;now; `JADE.USDT]; 
- usdt:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.USDT;now; `JADE.USDT]; 
+ eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  getBalanceByAsset[`JADE.EOS;timepoint; `JADE.USDT];
+ eth:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.ETH;timepoint;`JADE.USDT];
+ btc:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.BTC;timepoint; `JADE.USDT]; 
+ usdt:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from getBalanceByAsset[`JADE.USDT;timepoint; `JADE.USDT]; 
  t::(eos,eth,btc,usdt);
- bact:update time:now from select  cap:sum amount by account from t;
+ bact:update time:timepoint from select  cap:sum amount by account from t;
  recov:`time`account xkey update eos:0^eos, eth:0^eth, usdt:0^usdt, btc:0^btc from  (((( bact lj (`account xkey select account, eos:amount from eos) ) lj (`account xkey select account, btc:amount from btc) ) lj (`account xkey select account, eth:amount from eth) ) lj (`account xkey select account,usdt:amount from usdt) );   portfolio,::recov;}
 
 

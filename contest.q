@@ -5,12 +5,12 @@ closeconn:{[] hclose hapi;}
 now:: "P"$((string(.z.p))[til 13])
 
 recoverPortfolio:{[timepoint] 
- eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  hapi"getBalanceByAsset[`JADE.EOS;", (string now )," ; `JADE.USDT]";
- eth:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.ETH;", (string now )," ; `JADE.USDT]";
- btc:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.BTC;", (string now )," ; `JADE.USDT]"; 
- usdt:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.USDT;", (string now )," ; `JADE.USDT]"; 
+ eos:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from  hapi"getBalanceByAsset[`JADE.EOS;", (string timepoint )," ; `JADE.USDT]";
+ eth:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.ETH;", (string timepoint )," ; `JADE.USDT]";
+ btc:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.BTC;", (string timepoint )," ; `JADE.USDT]"; 
+ usdt:select account:accountName, asset_name:sym ,amount :amount + lockedAmount from hapi"getBalanceByAsset[`JADE.USDT;", (string timepoint )," ; `JADE.USDT]"; 
  t::(eos,eth,btc,usdt);
- bact:update time:now from select  cap:sum amount by account from t;
+ bact:update time:timepoint from select  cap:sum amount by account from t;
  recov:`time`account xkey update eos:0^eos, eth:0^eth, usdt:0^usdt, btc:0^btc from  (((( bact lj (`account xkey select account, eos:amount from eos) ) lj (`account xkey select account, btc:amount from btc) ) lj (`account xkey select account, eth:amount from eth) ) lj (`account xkey select account,usdt:amount from usdt) );   portfolio,::recov;}
 
 
